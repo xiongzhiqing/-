@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call Stack</title>
+</head>
+
+<body>
+  <script>
+    const permute = function (nums) {
+      // 缓存数组的长度
+      const len = nums.length
+      // cur 变量用来记录当前的排序内容
+      const cur = []
+      // res 用来记录所有的排列循序
+      const res = []
+      // visited 用来避免重复使用同一个数字
+      const visited = {}
+
+      // 定义 dfs 函数， 入参是坑位的索引（从0计数）
+      function dfs(nth) {
+        // 若遍历到了不存在的坑位（第len + 1个），则碰触递归边界返回
+        if (nth === len) {
+          // 此时前 len 个坑位已经填满，将对应的排列记录下来
+          res.push(cur.slice())
+          return
+        }
+        for (let i = 0; i < len; i++) {
+          // 若 nums[i] 之前没有被其他坑位用过， 则可以理解为 “这个数字剩下了”
+          if (!visited[nums[i]]) {
+            // 给 num[1] 打个 ‘已用过’ 的标
+            visited[nums[i]] = 1
+            // 将nums[i]推入当前排列
+            cur.push(nums[i])
+            // 基于这个排列继续往下一个坑位走去
+            dfs(nth + 1)
+            // nums[i]让出当前坑位
+            cur.pop()
+            // 下掉‘已用过’的标识
+            visited[nums[i]] = 0
+          }
+        }
+      }
+      // 从索引0的坑位（也就是第一个坑位）开始 dfs
+      dfs(0)
+      return res
+    }
+
+
+
+    console.log(permute([1, 2, 3]), 'permute')
+
+
+    const subsets = function (nums) {
+      // 初始化结果数组
+      const res = []
+      // 缓存数组长度
+      const len = nums.length
+      // 初始化组合数组
+      const subset = []
+      // 进入dfs（深度遍历）
+      dfs(0)
+      // 定义 dfs 函数， 入参是 nums 中的数字索引
+      function dfs(index) {
+        // 每次进入，都意味着组合内容更新了一次，故直接推入结果数组
+        res.push(subset.slice())
+        // 从当前数字的索引开始， 遍历nums
+        for (let i = index; i < len; i++) {
+          // 这是当前数字存在于组合中的情况
+          subset.push(nums[i])
+          // 基于当前数字存在于组合中的情况，进一步dfs
+          dfs(i + 1)
+          // 这是当前数字不存在与组合中的情况
+          subset.pop()
+        }
+      }
+      // 返回结果数组
+      return res
+    }
+    console.log('subsets', subsets([1, 2, 3]))
+  </script>
+</body>
+
+</html>

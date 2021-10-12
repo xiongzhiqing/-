@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>平衡二叉树</title>
+</head>
+
+<body>
+  <script>
+    // 给定一个二叉树，判断它是否是高度平衡的二叉树。
+    const isBalanced = function (root) {
+      // 立一个flag，只要有一个高度差绝对值大于1，这个flag就会被置位false
+      let flag = true
+      // 定义递归逻辑
+      function dfs(root) {
+        // 如果是空树，高度记为 0；如果flag已经false了，那么就没有必要往下走了，直接return
+        if (!root || !flag) return 0
+
+        // 计算左子树的高度
+        const left = dfs(root.left)
+        // 计算右子树的高度
+        const right = dfs(root.right)
+        // 如果左右子树的高度差绝对值大于1，flag就破功了
+        if (Math.abs(left - right) > 1) {
+          flag = false
+          // 后面再发生什么已经不重要了，返回一个不影响回溯计算的值
+          return 0
+        }
+        console.log(Math.max(left, right) + 1)
+        // 返回当前子树的高度
+        return Math.max(left, right) + 1
+      }
+      // 递归入库
+      dfs(root)
+      // 返回 flag 的值
+      return flag
+    }
+
+    console.log('isBalanced', isBalanced({
+      val: 3,
+      left: {
+        val: 9
+      },
+      right: {
+        val: 20,
+        left: {
+          val: 15,
+          left: {
+            val: 167
+          }
+        },
+        right: {
+          val: 7
+        }
+      }
+    }))
+  </script>
+</body>
+
+</html>
