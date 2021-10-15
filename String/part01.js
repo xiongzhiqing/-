@@ -108,7 +108,56 @@ class WordDictionary {
     const reg = new RegExp(word)
     // 只要数组中有一个匹配正则表达式的字符串， 就返回true
     return this.words[len].some(item => {
-      return reg.test(word)
+      return reg.test(item)
     })
   }
+}
+
+const wordDictionary = new WordDictionary()
+wordDictionary.addWord('abb')
+wordDictionary.addWord('aabb')
+console.log(wordDictionary.search('abb'));
+console.log(wordDictionary.search('aaabb'));
+console.log(wordDictionary.search('a..'));
+
+/**
+ * 字符串与数字之间的装换问题
+ *
+ * 真题描述：请你来实现一个 atoi 函数，使其能将字符串转换成整数。
+*/
+
+const myAtoi = function (str) {
+  // 编写正则表达式
+  const reg = /\s*([-\+]?\d*).*/
+  // 得到捕获组
+  const groups = str.match(reg)
+
+  // 计算最大值
+  const max = Math.pow(2, 31) - 1
+  // 计算最小值
+  const min = -max - 1
+  // targetName 用于存储转换出来的数字
+  let targetNum = 0
+
+  // 匹配成功
+  if(groups) {
+    // 尝试转化捕获到的结构
+    targetNum = +groups[1]
+    // 即便成功，也可能出现非数字的情况，比如：单一个'+'
+    if (isNaN(targetNum)) {
+      // 不能进行有效的转换时，返回 0
+      targetNum = 0
+    }
+  }
+
+  // 卡口判断
+  if (targetNum > max) {
+    return max
+  }
+  if (targetNum < min) {
+    return min
+  }
+
+  // 返回转换结果
+  return targetNum
 }
